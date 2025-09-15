@@ -49,7 +49,7 @@ def apply_rectangular_fov(arr, rect_width=400, rect_height=300):
 basedir = '/Users/Nathan/Documents/Oxford/DPhil/melanocyte/'
 
 data_folder = 'data/Still_Images_with_BF_for_Nathan/'
-filename = 'VID289_D5_1_01d00h00m'
+filename = 'VID289_A5_1_00d00h00m'
 
 filnames = ['VID289_A5_1_01d00h00m','VID289_B4_1_01d00h00m','VID289_D5_1_01d00h00m','VID289_E2_1_01d00h00m']
 
