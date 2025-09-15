@@ -289,7 +289,7 @@ def threshold_arr_2D(tf_array, threshold):
 
 
 
-def generate_filenames(experiment_id="B4", base="VID289"):
+def generate_filenames_non_symmetric(experiment_id="B4", base="VID289"):
     filenames = []
 
     # Day 0: every 3 hours
@@ -303,6 +303,23 @@ def generate_filenames(experiment_id="B4", base="VID289"):
         filenames.append(filename)
 
     return filenames
+
+def generate_filenames(experiment_id="B4", base="VID289",
+                       start_day=0, start_hour=0, start_minute=0, 
+                       end_day = 5, end_hour = 21, end_minute=45, 
+                       gap_days=1, gap_hours=3, gap_minutes=1
+):
+    filenames = []
+
+    # Generate filenames for the starting day with specified hour and minute intervals
+    for day in range(start_day, end_day + 1, gap_days):
+      for hour in range(start_hour, end_hour + 1, gap_hours):
+          for minute in range(start_minute, end_minute + 1, gap_minutes):
+              filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
+              filenames.append(filename)
+
+    return filenames
+
 
 
 # Extract time in days from filenames using regular expressions
