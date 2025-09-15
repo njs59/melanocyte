@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
+import re
 
 from skimage import filters
 
@@ -285,4 +286,41 @@ def threshold_arr_2D(tf_array, threshold):
 
 
     return tf_array_bool
+
+
+
+def generate_filenames(experiment_id="B4", base="VID289"):
+    filenames = []
+
+    # Day 0: every 3 hours
+    for hour in range(6, 24, 3):
+        filename = f"{base}_{experiment_id}_1_00d{hour:02d}h00m"
+        filenames.append(filename)
+
+    # Days 1 to 4: only 00h
+    for day in range(1, 6):
+        filename = f"{base}_{experiment_id}_1_{day:02d}d00h00m"
+        filenames.append(filename)
+
+    return filenames
+
+
+# Extract time in days from filenames using regular expressions
+def extract_days(filenames):
+    days = []
+    for name in filenames:
+        match = re.search(r"(\d{2})d(\d{2})h", name)
+        if match:
+            day = int(match.group(1))
+            hour = int(match.group(2))
+            day_fraction = day + hour / 24.0
+            days.append(day_fraction)
+    return days
+
+# Use the same cropping function as before
+def apply_rectangular_fov(arr, rect_width=1000, rect_height=800):
+    center_x, center_y = arr.shape[1] // 2, arr.shape[0] // 2
+    start_x = center_x - rect_width // 2
+    start_y = center_y - rect_height // 2
+    return arr[start_y:start_y + rect_height, start_x:start_x + rect_width]
 
