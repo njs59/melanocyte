@@ -106,7 +106,7 @@ plt.show()
 
 
 # Fill any single pixel holes in clusters
-current_array = binary_fill_holes(array_2).astype(int) 
+current_array = binary_fill_holes(array_3).astype(int) 
 
 # Label the clusters of the boolean array
 label_arr, num_clus = label(current_array)
