@@ -39,11 +39,11 @@ def apply_rectangular_fov(arr, rect_width=1000, rect_height=800):
 # Process each day
 for filename in filenames:
     raw_arr_2D_1, raw_arr_2D_2, raw_arr_2D_3 = tif.tif_to_arr(basedir, data_folder, filename, str(time), fileID)
-    arr2_normal = apply_rectangular_fov(raw_arr_2D_2.astype(int))
+    arr3_normal = apply_rectangular_fov(raw_arr_2D_3.astype(int))
 
-    thresh_otsu_2 = filters.threshold_otsu(arr2_normal)
-    array_2 = arr2_normal < thresh_otsu_2
-    current_array = binary_fill_holes(array_2).astype(int)
+    thresh_otsu_3 = filters.threshold_otsu(arr3_normal)
+    array_3 = arr3_normal < thresh_otsu_3
+    current_array = binary_fill_holes(array_3).astype(int)
     label_arr, num_clus = label(current_array)
 
     area_list = ndi_sum(current_array, labels=label_arr, index=np.arange(label_arr.max() + 1))
