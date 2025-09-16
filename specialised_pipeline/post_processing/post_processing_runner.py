@@ -236,10 +236,10 @@ for experiment_id in experiment_ids:
                         # Find ID of nearby non-assigned cluster
                         cluster_index_split_from = post_oper.pick_cluster_inverse_dist(near_non_assigned_clus, clus_distances_non_assigned)
                         # Keeps ID of old cluster
-                        cluster_ID = df_old.iloc[cluster_index_split_from - 1 , 0]
+                        cluster_ID = float(df_old.iloc[cluster_index_split_from - 1 , 0].item())
 
                         # Find and compare sizes of old and new cluster
-                        old_cluster_size = df_old.iloc[cluster_index_split_from - 1 , 1]
+                        old_cluster_size = float(df_old.iloc[cluster_index_split_from - 1 , 1].item())
                         new_cluster_size = area_2D_current[index_of_interest-1]
                         percent_diff = 100*(abs(new_cluster_size - old_cluster_size))/((old_cluster_size+new_cluster_size)/2)
                         
@@ -303,10 +303,10 @@ for experiment_id in experiment_ids:
                             # Pick random event with single cluster inversely proportional to distance
                             cluster_index_split_from = post_oper.pick_cluster_inverse_dist(near_non_assigned_clus, clus_distances_non_assigned)
                             # Get ID of selected cluster
-                            cluster_ID = df_old.iloc[cluster_index_split_from - 1 , 0]
+                            cluster_ID = float(df_old.iloc[cluster_index_split_from - 1 , 0].item())
 
                             # Find and compare sizes of old and new cluster
-                            old_cluster_size = df_old.iloc[cluster_index_split_from - 1 , 1]
+                            old_cluster_size = float(df_old.iloc[cluster_index_split_from - 1 , 1].item())
                             new_cluster_size = area_2D_current[index_of_interest-1]
                             percent_diff = 100*(abs(new_cluster_size - old_cluster_size))/((old_cluster_size+new_cluster_size)/2)
                             
@@ -345,10 +345,10 @@ for experiment_id in experiment_ids:
                         # Pick random event with single cluster inversely proportional to distance
                         candidate_cluster_index_split_from = post_oper.pick_cluster_inverse_dist(near_clus, clus_distances)
                         # Get ID of selected cluster
-                        candidate_cluster_ID = df_old.iloc[candidate_cluster_index_split_from - 1 , 0]
+                        candidate_cluster_ID = float(df_old.iloc[candidate_cluster_index_split_from - 1 , 0].item())
 
                         # Find and compare sizes of old and new cluster
-                        old_cluster_size = df_old.iloc[candidate_cluster_index_split_from - 1 , 1]
+                        old_cluster_size = float(df_old.iloc[candidate_cluster_index_split_from - 1 , 1].item())
                         new_cluster_size = area_2D_current[index_of_interest-1]
                         percent_diff = 100*(abs(new_cluster_size - old_cluster_size))/((old_cluster_size+new_cluster_size)/2)
         
@@ -409,7 +409,7 @@ for experiment_id in experiment_ids:
 
         # Save dataframe output for current timepoint to .csv file
         df_total_areas = pd.DataFrame(df_step)
-        df_step_csv_name_list = basedir, 'specialised_pipeline/', 'pre_processing_output/', base_str, '/', filename, '_post_processing', '.csv' 
+        df_step_csv_name_list = basedir, 'specialised_pipeline/', 'post_processing_output/', base_str, '/', filename, '_post_processing', '.csv' 
         df_step_name_list_2  =''.join(df_step_csv_name_list)
         df_total_areas.to_csv(df_step_name_list_2, index=False, header=True)
 
