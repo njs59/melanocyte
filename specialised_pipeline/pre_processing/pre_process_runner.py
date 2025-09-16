@@ -84,13 +84,13 @@ for experiment_id in experiment_ids:
 
 
         # Save area array to csv file
-        df_area = pd.DataFrame(update_label_arr)
+        df_area = pd.DataFrame(update_area_arr)
         area_csv_name_list = current_saving_dir, filename, '_area', '.csv'
         area_csv_name_list_2  =''.join(area_csv_name_list)
         df_area.to_csv(area_csv_name_list_2, index=False, header=False)
 
         # Save index array to csv file
-        df_index = pd.DataFrame(update_area_arr)
+        df_index = pd.DataFrame(update_label_arr)
         index_csv_name_list = current_saving_dir, filename, '_indexed', '.csv'
         index_csv_name_list_2  =''.join(index_csv_name_list)
         df_index.to_csv(index_csv_name_list_2, index=False, header=False)
