@@ -143,25 +143,25 @@ for experiment_id in experiment_ids:
 
     # Save 2D cluster areas array to csv
     df_cluster_areas = pd.DataFrame(cluster_areas)
-    cluster_areas_csv_name_list = current_saving_dir, base_str, experiment_id, '_cluster_areas', '.csv'
+    cluster_areas_csv_name_list = current_saving_dir, 'csv_files/', base_str, '_', experiment_id, '_cluster_areas', '.csv'
     cluster_areas_csv_name_list_2  =''.join(cluster_areas_csv_name_list)
     df_cluster_areas.to_csv(cluster_areas_csv_name_list_2, index=False, header=False)
 
     # Save mean areas to csv
     df_mean_areas = pd.DataFrame(mean_areas)
-    mean_areas_csv_name_list = current_saving_dir, base_str, experiment_id, '_mean_areas', '.csv'
+    mean_areas_csv_name_list = current_saving_dir, 'csv_files/', base_str, '_', experiment_id, '_mean_areas', '.csv'
     mean_areas_csv_name_list_2  =''.join(mean_areas_csv_name_list)
     df_mean_areas.to_csv(mean_areas_csv_name_list_2, index=False, header=False)
 
     # Save total areas to csv
     df_total_areas = pd.DataFrame(total_areas)
-    total_areas_csv_name_list = current_saving_dir, base_str, experiment_id, '_total_areas', '.csv'
+    total_areas_csv_name_list = current_saving_dir, 'csv_files/', base_str, '_', experiment_id, '_total_areas', '.csv'
     total_areas_csv_name_list_2  =''.join(total_areas_csv_name_list)
     df_total_areas.to_csv(total_areas_csv_name_list_2, index=False, header=False)
 
     # Save number of clusters to csv
     df_number_clusters = pd.DataFrame(num_clusters)
-    number_clusters_csv_name_list = current_saving_dir, base_str, experiment_id, '_number_clusters', '.csv'
+    number_clusters_csv_name_list = current_saving_dir, 'csv_files/', base_str, '_', experiment_id, '_number_clusters', '.csv'
     number_clusters_csv_name_list_2  =''.join(number_clusters_csv_name_list)
     df_number_clusters.to_csv(number_clusters_csv_name_list_2, index=False, header=False)
 
@@ -196,7 +196,9 @@ plt.ylabel('Total Area')
 plt.grid(True)
 plt.legend()
 plt.tight_layout()
-plt.savefig("total_area_summary.png")
+plot_name_list = current_saving_dir, 'plots/', base_str, 'total_area_summary.png'
+plot_name = ''.join(plot_name_list)
+plt.savefig(plot_name, dpi=300)
 plt.show()
 
 # Mean Cluster Area
@@ -209,7 +211,9 @@ plt.ylabel('Mean Area')
 plt.grid(True)
 plt.legend()
 plt.tight_layout()
-plt.savefig("mean_area_summary.png")
+plot_name_list = current_saving_dir, 'plots/', base_str, 'mean_area_summary.png'
+plot_name = ''.join(plot_name_list)
+plt.savefig(plot_name, dpi=300)
 plt.show()
 
 # Number of Clusters
@@ -222,7 +226,9 @@ plt.ylabel('Number of Clusters')
 plt.grid(True)
 plt.legend()
 plt.tight_layout()
-plt.savefig("cluster_count_summary.png")
+plot_name_list = current_saving_dir, 'plots/', base_str, 'cluster_count_summary.png'
+plot_name = ''.join(plot_name_list)
+plt.savefig(plot_name, dpi=300)
 plt.show()
 
 
@@ -238,7 +244,9 @@ plt.ylabel('Total Volume (µm³)')
 plt.grid(True)
 plt.legend()
 plt.tight_layout()
-plt.savefig("total_spherical_volume_summary.png")
+plot_name_list = current_saving_dir, 'plots/', base_str, 'total_spherical_volume_summary.png'
+plot_name = ''.join(plot_name_list)
+plt.savefig(plot_name, dpi=300)
 plt.show()
 
 # Mean Volume
@@ -251,7 +259,9 @@ plt.ylabel('Mean Volume (µm³)')
 plt.grid(True)
 plt.legend()
 plt.tight_layout()
-plt.savefig("mean_spherical_volume_summary.png")
+plot_name_list = current_saving_dir, 'plots/', base_str, 'mean_spherical_volume_summary.png'
+plot_name = ''.join(plot_name_list)
+plt.savefig(plot_name, dpi=300)
 plt.show()
 
 
