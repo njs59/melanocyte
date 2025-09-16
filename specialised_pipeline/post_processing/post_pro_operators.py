@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import re
 
 ## Calculate centres of mass from arrays
 def calc_clus_centre(labelled_arr):
@@ -173,14 +174,93 @@ def pick_cluster_inverse_dist(clusters_index_output, distances):
         # Return the cluster index randomly sampled with weight inverse to distance from site of interest
         return int(cluster_selected)
 
-# def calc_clus_centre(labelled_arr, index_keep):
-# ## Returns a list of centres of clusters with desired indexes from a labelled array
-#     centres = np.array([])
-#     for i in range(len(index_keep)):
-#         locs_of_size = np.transpose((labelled_arr==index_keep[i]).nonzero())
-#         centre_of_mass = locs_of_size.mean(axis=0)
-#         centre_of_mass = np.rint(centre_of_mass)
-#         centres = np.append(centres, centre_of_mass)
 
-#     centres_2D = np.reshape(centres, (-1, 2))
-#     return centres_2D
+def extract_time_components(filenames):
+    days = []
+    hours = []
+    minutes = []
+    day_fractions = []
+
+    for name in filenames:
+        match = re.search(r"(\d{2})d(\d{2})h(\d{2})m", name)
+        if match:
+            day = int(match.group(1))
+            hour = int(match.group(2))
+            minute = int(match.group(3))
+            day_fraction = day + hour / 24.0 + minute / 1440.0  # 1440 = 24*60
+
+            days.append(day)
+            hours.append(hour)
+            minutes.append(minute)
+            day_fractions.append(day_fraction)
+
+    return day_fractions, days, hours, minutes
+
+
+# Use the same cropping function as before
+def apply_rectangular_fov(arr, rect_width=1000, rect_height=800):
+    center_x, center_y = arr.shape[1] // 2, arr.shape[0] // 2
+    start_x = center_x - rect_width // 2
+    start_y = center_y - rect_height // 2
+    return arr[start_y:start_y + rect_height, start_x:start_x + rect_width]
+
+
+def generate_filenames(experiment_id="B4", base="VID289",
+    start_day=0, start_hour=0, start_minute=0, 
+    end_day=5, end_hour=21, end_minute=45,
+    lowest_day=0, lowest_hour=0, lowest_minute=0,
+    highest_day=5, highest_hour=21, highest_minute=45, 
+    gap_days=1, gap_hours=3, gap_minutes=15
+):
+    filenames = []
+
+    # Generate filenames for the starting day with specified hour and minute intervals.
+    # Generalised as much as possible. Can input both start times, finish times 
+    # and highest values for each of days, hour, mins
+    if lowest_day != start_day:
+        raise ValueError("Error: lowest_day does not match start_day")
+
+    # First day treated differently as could be a partial day
+    day = start_day
+    hour = start_hour
+    for minute in range(start_minute, highest_minute + 1, gap_minutes):
+        filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
+        filenames.append(filename)
+
+    if start_hour < highest_hour:
+        for hour in range(start_hour + gap_hours, highest_hour + 1, gap_hours):
+            if hour == end_hour and day == end_day:
+                # In edge case of partial final hour on partial first day
+                for minute in range(lowest_minute, end_minute + 1, gap_minutes):
+                    filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
+                    filenames.append(filename)
+                break
+            else:
+                for minute in range(lowest_minute, highest_minute + 1, gap_minutes):            
+                    filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
+                    filenames.append(filename)
+
+    # Main loop for all full days
+    for day in range(start_day + 1, end_day, gap_days):
+        for hour in range(start_hour, highest_hour + 1, gap_hours):
+            for minute in range(start_minute, highest_minute + 1, gap_minutes):
+                filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
+                filenames.append(filename)
+
+    # Last day treated differently as could be a partial day
+    day = highest_day
+    if highest_day == lowest_day:
+        print('Partial day only, logic should have been correct elsewhere')
+    else:
+    
+        for hour in range(start_hour, end_hour, gap_hours):
+            for minute in range(start_minute, highest_minute + 1, gap_minutes):
+                filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
+                filenames.append(filename)
+
+        hour = end_hour
+        for minute in range(start_minute, end_minute + 1, gap_minutes):
+            filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
+            filenames.append(filename)
+
+    return filenames
