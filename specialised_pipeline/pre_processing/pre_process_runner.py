@@ -83,7 +83,7 @@ for experiment_id in experiment_ids:
         area_new, index_keep = pre_oper.remove_fragments(area_list, num_clus, min_clus_size)
             
 
-        update_area_arr = np.where(np.isin(label_arr, index_keep), label_arr, 0)
+        update_area_arr = np.where(np.isin(label_arr, index_keep), area_list[label_arr], 0)
         update_boolean_arr = update_area_arr != 0
         update_label_arr, update_num_clus = label(update_boolean_arr)
 
