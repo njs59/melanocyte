@@ -181,12 +181,12 @@ def save_clus_areas(i, area_new, cluster_areas):
             # Stack vertically into 2D array
             cluster_areas = np.vstack((cluster_areas, area_to_add))
         # Print current shape of 2D array
-        print('Shape clus', cluster_areas.shape)
+        # print('Shape clus', cluster_areas.shape)
 
     # Case where i > 1
     else:
         # Print 2 sizes to compare (number of new clusters, max number of old clusters)
-        print('Compare', len(area_new), cluster_areas.shape[1])
+        # print('Compare', len(area_new), cluster_areas.shape[1])
 
         # If less clusters than previous max number of clusters
         if len(area_new) < cluster_areas.shape[1]:
@@ -213,7 +213,7 @@ def save_clus_areas(i, area_new, cluster_areas):
             # Stack vertically into 2D array
             cluster_areas = np.vstack((cluster_areas, area_to_add))
         # Print current shape of 2D array
-        print('Shape clus', cluster_areas.shape)
+        # print('Shape clus', cluster_areas.shape)
 
     return cluster_areas
 
@@ -326,6 +326,7 @@ def generate_filenames(experiment_id="B4", base="VID289",
     # First day treated differently as could be a partial day
     day = start_day
     hour = start_hour
+    # First hour treated differently
     for minute in range(start_minute, highest_minute + 1, gap_minutes):
         filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
         filenames.append(filename)
@@ -345,8 +346,8 @@ def generate_filenames(experiment_id="B4", base="VID289",
 
     # Main loop for all full days
     for day in range(start_day + 1, end_day, gap_days):
-        for hour in range(start_hour, highest_hour + 1, gap_hours):
-            for minute in range(start_minute, highest_minute + 1, gap_minutes):
+        for hour in range(lowest_hour, highest_hour + 1, gap_hours):
+            for minute in range(lowest_minute, highest_minute + 1, gap_minutes):
                 filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
                 filenames.append(filename)
 
@@ -356,13 +357,13 @@ def generate_filenames(experiment_id="B4", base="VID289",
         print('Partial day only, logic should have been correct elsewhere')
     else:
     
-        for hour in range(start_hour, end_hour, gap_hours):
-            for minute in range(start_minute, highest_minute + 1, gap_minutes):
+        for hour in range(lowest_hour, end_hour, gap_hours):
+            for minute in range(lowest_minute, highest_minute + 1, gap_minutes):
                 filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
                 filenames.append(filename)
 
         hour = end_hour
-        for minute in range(start_minute, end_minute + 1, gap_minutes):
+        for minute in range(lowest_minute, end_minute + 1, gap_minutes):
             filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
             filenames.append(filename)
 

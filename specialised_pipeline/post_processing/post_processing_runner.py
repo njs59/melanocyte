@@ -24,8 +24,8 @@ min_clus_size = 150
 base_str = "VID289"
 
 # experiment_id = "B4"  # Change this as needed
-experiment_ids = ["A5","B4","D5","E2"]  # Change this as needed
-
+# experiment_ids = ["A5","B4","D5","E2"]  # Change this as needed
+experiment_ids = ["A1","A3","A5","B2","B4","B6","D1","D3","D5","E2","E4","E6"]
 
 # Initialize storage for all experiments
 summary_data = {eid: {"days": [], "total": [], "mean": [], "count": [], "vol_total": [], "vol_mean": []} for eid in experiment_ids}
@@ -50,10 +50,10 @@ percent_diff_max = 20
 for experiment_id in experiment_ids:
     
     filenames = post_oper.generate_filenames(experiment_id=experiment_id, base="VID289",
-                       start_day = 1, start_hour = 0, start_minute = 0, 
+                       start_day = 0, start_hour = 6, start_minute = 0, 
                        end_day = 5, end_hour = 0, end_minute = 0,
-                       lowest_day = 1, lowest_hour = 0, lowest_minute = 0,
-                       highest_day = 5, highest_hour = 0, highest_minute = 0, 
+                       lowest_day = 0, lowest_hour = 0, lowest_minute = 0,
+                       highest_day = 5, highest_hour = 21, highest_minute = 0, 
                        gap_days = 1, gap_hours = 3, gap_minutes = 15)
     for name in filenames:
         print(name)
@@ -74,9 +74,6 @@ for experiment_id in experiment_ids:
 
         current_read_in_dir_list = basedir, 'specialised_pipeline/', 'pre_processing_output/', base_str, '/'
         current_read_in_dir  =''.join(current_read_in_dir_list)
-
-        current_saving_dir_list = basedir, 'specialised_pipeline/', 'pre_processing_output/', base_str, '/'
-        current_saving_dir  =''.join(current_read_in_dir_list)
 
         t_before_step = time.time()
 

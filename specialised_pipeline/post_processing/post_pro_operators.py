@@ -223,6 +223,7 @@ def generate_filenames(experiment_id="B4", base="VID289",
     # First day treated differently as could be a partial day
     day = start_day
     hour = start_hour
+    # First hour treated differently
     for minute in range(start_minute, highest_minute + 1, gap_minutes):
         filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
         filenames.append(filename)
@@ -242,8 +243,8 @@ def generate_filenames(experiment_id="B4", base="VID289",
 
     # Main loop for all full days
     for day in range(start_day + 1, end_day, gap_days):
-        for hour in range(start_hour, highest_hour + 1, gap_hours):
-            for minute in range(start_minute, highest_minute + 1, gap_minutes):
+        for hour in range(lowest_hour, highest_hour + 1, gap_hours):
+            for minute in range(lowest_minute, highest_minute + 1, gap_minutes):
                 filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
                 filenames.append(filename)
 
@@ -253,13 +254,13 @@ def generate_filenames(experiment_id="B4", base="VID289",
         print('Partial day only, logic should have been correct elsewhere')
     else:
     
-        for hour in range(start_hour, end_hour, gap_hours):
-            for minute in range(start_minute, highest_minute + 1, gap_minutes):
+        for hour in range(lowest_hour, end_hour, gap_hours):
+            for minute in range(lowest_minute, highest_minute + 1, gap_minutes):
                 filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
                 filenames.append(filename)
 
         hour = end_hour
-        for minute in range(start_minute, end_minute + 1, gap_minutes):
+        for minute in range(lowest_minute, end_minute + 1, gap_minutes):
             filename = f"{base}_{experiment_id}_1_{day:02d}d{hour:02d}h{minute:02d}m"
             filenames.append(filename)
 

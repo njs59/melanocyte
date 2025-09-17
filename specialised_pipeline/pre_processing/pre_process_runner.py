@@ -1,10 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import pandas as pd
 import re
 from skimage import filters
 from scipy.ndimage import binary_fill_holes, label
 from scipy.ndimage import sum as ndi_sum
+from collections import defaultdict
 
 # Use existing imports from user's code
 import read_tif_file_operator as tif  # Custom module
@@ -26,7 +28,9 @@ base_str = "VID289"
 
 
 # experiment_id = "B4"  # Change this as needed
-experiment_ids = ["A5","B4","D5","E2"]  # Change this as needed
+# experiment_ids = ["A5","B4","D5","E2"]  # Change this as needed
+# experiment_ids = ["A1","A3","A5","B2","B4","B6","D1","D3","D5","E2","E4","E6"]  # Change this as needed
+experiment_ids = ["A1","A3","A5","D1","D3","D5"]  # Change this as needed
 
 
 # Initialize storage for all experiments
@@ -34,12 +38,13 @@ summary_data = {eid: {"days": [], "total": [], "mean": [], "count": [], "vol_tot
 
 
 for experiment_id in experiment_ids:
+    print('Running on file: ', experiment_id)
     
     filenames = pre_oper.generate_filenames(experiment_id=experiment_id, base="VID289",
-                       start_day = 1, start_hour = 0, start_minute = 0, 
+                       start_day = 0, start_hour = 6, start_minute = 0, 
                        end_day = 5, end_hour = 0, end_minute = 0,
-                       lowest_day = 1, lowest_hour = 0, lowest_minute = 0,
-                       highest_day = 5, highest_hour = 0, highest_minute = 0, 
+                       lowest_day = 0, lowest_hour = 0, lowest_minute = 0,
+                       highest_day = 5, highest_hour = 21, highest_minute = 0, 
                        gap_days = 1, gap_hours = 3, gap_minutes = 15)
     for name in filenames:
         print(name)
@@ -184,12 +189,44 @@ for eid in experiment_ids:
 
 
 
+# Define base colors for each condition
+condition_colors = {
+    'A': '#1f77b4',  # blue
+    'B': '#ff7f0e',  # orange
+    'D': '#2ca02c',  # green
+    'E': '#9467bd'   # purple
+}
+
+# Normalize repeat numbers within each condition to assign shades
+condition_repeats = defaultdict(list)
+for eid in experiment_ids:
+    condition = eid[0]
+    repeat = int(eid[1:])
+    condition_repeats[condition].append(repeat)
+
+# Sort repeat numbers for consistent shading
+for condition in condition_repeats:
+    condition_repeats[condition].sort()
+
+# Build color map
+color_map = {}
+for eid in experiment_ids:
+    condition = eid[0]
+    repeat = int(eid[1:])
+    base_color = mcolors.to_rgb(condition_colors[condition])
+    repeat_list = condition_repeats[condition]
+    index = repeat_list.index(repeat)
+    factor = 1 - index * 0.3  # e.g., 1.0, 0.7, 0.4
+    shaded_color = tuple(factor * c + (1 - factor) * 1 for c in base_color)  # blend with white
+    color_map[eid] = shaded_color
+
+
 # Plotting all experiments together
 
 # Total Area
 plt.figure(figsize=(10, 6))
 for eid in experiment_ids:
-    plt.plot(summary_data[eid]["days"], summary_data[eid]["total"], marker='o', label=eid)
+    plt.plot(summary_data[eid]["days"], summary_data[eid]["total"], marker='o', label=eid, color=color_map[eid])
 plt.title('Total Cluster Area Over Time')
 plt.xlabel('Day')
 plt.ylabel('Total Area')
@@ -204,7 +241,7 @@ plt.show()
 # Mean Cluster Area
 plt.figure(figsize=(10, 6))
 for eid in experiment_ids:
-    plt.plot(summary_data[eid]["days"], summary_data[eid]["mean"], marker='s', label=eid)
+    plt.plot(summary_data[eid]["days"], summary_data[eid]["mean"], marker='s', label=eid, color=color_map[eid])
 plt.title('Mean Cluster Area Over Time')
 plt.xlabel('Day')
 plt.ylabel('Mean Area')
@@ -219,7 +256,7 @@ plt.show()
 # Number of Clusters
 plt.figure(figsize=(10, 6))
 for eid in experiment_ids:
-    plt.plot(summary_data[eid]["days"], summary_data[eid]["count"], marker='^', label=eid)
+    plt.plot(summary_data[eid]["days"], summary_data[eid]["count"], marker='^', label=eid, color=color_map[eid])
 plt.title('Number of Clusters Over Time')
 plt.xlabel('Day')
 plt.ylabel('Number of Clusters')
@@ -237,7 +274,7 @@ plt.show()
 # Total Volume
 plt.figure(figsize=(10, 6))
 for eid in experiment_ids:
-    plt.plot(summary_data[eid]["days"], summary_data[eid]["vol_total"], marker='o', label=eid)
+    plt.plot(summary_data[eid]["days"], summary_data[eid]["vol_total"], marker='o', label=eid, color=color_map[eid])
 plt.title('Total Spherical Cluster Volume Over Time')
 plt.xlabel('Day')
 plt.ylabel('Total Volume (µm³)')
@@ -252,7 +289,7 @@ plt.show()
 # Mean Volume
 plt.figure(figsize=(10, 6))
 for eid in experiment_ids:
-    plt.plot(summary_data[eid]["days"], summary_data[eid]["vol_mean"], marker='s', label=eid)
+    plt.plot(summary_data[eid]["days"], summary_data[eid]["vol_mean"], marker='s', label=eid, color=color_map[eid])
 plt.title('Mean Spherical Cluster Volume Over Time')
 plt.xlabel('Day')
 plt.ylabel('Mean Volume (µm³)')
